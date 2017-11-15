@@ -30,7 +30,13 @@ class CI2C_Interface
     virtual unsigned int read_reg_16bit(unsigned char dev_adr, unsigned char reg_adr)  = 0;
     virtual void read_reg_multi(unsigned char dev_adr, unsigned char reg_adr, unsigned char *data, unsigned int count)  = 0;
 };
-
+/*
+@param port_name - názov portu na ktorom bude I2C, na výber sú TGPIOA až TGPIOD
+@param sda_pin - sda mi hovorí, ktorý pin zvoleného portu bude sda
+@param scl_pin - je to isté len pre scl
+@param bus_speed - nepovinný parameter, nastavuje rýchlosť zbernice, čím väčšie tým pomalšie
+@param scl_port_name - nepovinný, iba ak chcem mať scl port inde ako sda port
+*/
 template <unsigned char port_name, unsigned char sda_pin, unsigned char scl_pin, unsigned char bus_speed = 5, unsigned char scl_port_name = port_name>
 class TI2C : public CI2C_Interface
 {

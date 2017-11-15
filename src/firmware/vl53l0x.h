@@ -16,7 +16,7 @@ class CVL53L0X
   public:
     CVL53L0X();
     ~CVL53L0X();
-
+//pomocou i2c začne posielať do senzoru údaje
     int init(class CI2C_Interface *i2c_);
 
     int read();

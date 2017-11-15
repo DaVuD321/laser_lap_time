@@ -1,4 +1,4 @@
-CXX_SRCS = $(shell find  -name '*.cpp')
+CXX_SRCS = $(shell find . -name '*.cpp')
 
 INC = -I .
 INC+= -I ./libs
@@ -40,4 +40,4 @@ CLEAN_FILES = $(CXX_OBJS)
 CLEAN_FILES+= bin/main*
 
 clean:
-	rm $(CLEAN_FILES) -rf
+	rm $(CLEAN_FILES)

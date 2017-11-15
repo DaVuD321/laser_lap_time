@@ -2,7 +2,9 @@
 #include <rt_timer.h>
 #include <terminal.h>
 #include <math.h>
-
+#include <i2c.h>
+#include <vl53l0x.h>
+/*
 class CBlinkTask: public CTaskInterface
 {
   private:
@@ -35,11 +37,40 @@ class CBlinkTask: public CTaskInterface
 
 
 class CBlinkTask blink_task;
+*/
+
+class CMeasurementTask: public CTaskInterface
+{
+  private:
+  TI2C<TGPIOC,0,5> i2c_a;
+  CVL53L0X laser_a;
+
+  public:
+    CMeasurementTask()
+    {
+      int init_res;
+      init_res = laser_a.init(&i2c_a);
+      terminal << "LASER_init: " << init_res << "\n";
+    }
+
+    ~CMeasurementTask()
+    {
+
+    }
+
+    void operator ()()
+    {
+      int distance = laser_a.read();
+      terminal << "LASER_distance: " << distance << "\n";
+    }
+};
 
 
 int main()
 {
-  timer.add_task(&blink_task, 100, true);
+  CMeasurementTask measurement_task;
+
+  timer.add_task(&measurement_task, 100);
 
   terminal << "\nterminal ready\n\n";
 
