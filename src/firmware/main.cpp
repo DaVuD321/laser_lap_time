@@ -49,7 +49,7 @@ class CMeasurementTask: public CTaskInterface
     CMeasurementTask()
     {
       int init_res;
-      init_res = laser_a.init(&i2c_a);
+      init_res = laser_a.init(&i2c_a);    //konštruktor má paramater i2c, ktorú bude využívať konkrétny laser
       terminal << "LASER_init: " << init_res << "\n";
     }
 

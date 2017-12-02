@@ -7,6 +7,7 @@ class CVL53L0X
 {
   private:
     int distance_result;
+    bool valid_data;
 
     unsigned char range_data[14];
 
@@ -16,11 +17,12 @@ class CVL53L0X
   public:
     CVL53L0X();
     ~CVL53L0X();
-//pomocou i2c začne posielať do senzoru údaje
+
     int init(class CI2C_Interface *i2c_);
 
     int read();
-    int get();
+    int get_distance();
+    bool is_valid();
 
   private:
     bool getSPADinfo(unsigned char *count, bool * type_is_aperture);

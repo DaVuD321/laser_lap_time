@@ -1,1 +1,1 @@
-avrdude -c arduino -p atmega328p -P /dev/ttyp0 -U flash:w:main.hex
+avrdude -c arduino -p atmega328p -P /dev/tty.wchusbserialfa130 -U flash:w:main.hex

@@ -106,6 +106,7 @@ int CVL53L0X::init(class CI2C_Interface *i2c_)
   this->i2c = i2c_;
 
   distance_result = 8192;
+  valid_data = false;
 
   //set 2.8V mode
   i2c->write_reg(VL53L0X_ADDRESS, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, i2c->read_reg(VL53L0X_ADDRESS, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV)|0x01);
@@ -302,22 +303,31 @@ int CVL53L0X::read()
 
   int distance_tmp = (((uint16_t)range_data[10]) << 8) | ((uint16_t)range_data[11]);
 
-  if ((distance_tmp > 5) && (distance_tmp < 1024))
-  {
-    int filter_alpha = 8;
-    distance_result = (filter_alpha*distance_result + distance_tmp)/(filter_alpha + 1);
-  }
+  valid_data = false;
+
+  if (distance_tmp < 20)
+    distance_tmp = 20;
+  else if (distance_tmp > 500)
+    distance_tmp = 500;
   else
-    distance_result = 1024;
+  {
+    distance_result = distance_tmp;
+    valid_data = true;
+  }
 
   return distance_result;
 }
 
-int CVL53L0X::get()
+int CVL53L0X::get_distance()
 {
   return distance_result;
 }
 
+
+bool CVL53L0X::is_valid()
+{
+  return valid_data;
+}
 
 
 

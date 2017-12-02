@@ -27,6 +27,13 @@ CUSART::~CUSART()
 
 void CUSART::put_char(char c)
 {
+  if (c == '\n') {
+    UDR0 = '\r';
+
+    while(!(UCSR0A&(1<<UDRE0)))
+      __asm("nop");
+
+  }
   //transmit data
   UDR0 = c;
 
