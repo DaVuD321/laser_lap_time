@@ -4,6 +4,7 @@
 #include <math.h>
 #include <i2c.h>
 #include <vl53l0x.h>
+#include <object_detection.h>
 /*
 class CBlinkTask: public CTaskInterface
 {
@@ -39,18 +40,35 @@ class CBlinkTask: public CTaskInterface
 class CBlinkTask blink_task;
 */
 
+#define SENSORS_COUNT   (unsigned int)4
+
 class CMeasurementTask: public CTaskInterface
 {
   private:
-  TI2C<TGPIOC,0,5> i2c_a;
-  CVL53L0X laser_a;
+    TI2C<TGPIOC,0,5> i2c_a;
+    TI2C<TGPIOC,1,5> i2c_b;
+    TI2C<TGPIOC,2,5> i2c_c;
+    TI2C<TGPIOC,3,5> i2c_d;
+
+    CObjectDetection laser[SENSORS_COUNT];
 
   public:
     CMeasurementTask()
     {
       int init_res;
-      init_res = laser_a.init(&i2c_a);    //konštruktor má paramater i2c, ktorú bude využívať konkrétny laser
-      terminal << "LASER_init: " << init_res << "\n";
+
+      init_res = laser[0].init(&i2c_a);     //konštruktor má paramater i2c, ktorú bude využívať konkrétny laser
+      terminal << "LASER_init: " <<  init_res << "\n";
+
+      init_res = laser[1].init(&i2c_b);
+      terminal << "LASER_init: " <<  init_res << "\n";
+
+      init_res = laser[2].init(&i2c_c);
+      terminal << "LASER_init: " <<  init_res << "\n";
+
+      init_res = laser[3].init(&i2c_d);
+      terminal << "LASER_init: " <<  init_res << "\n";
+
     }
 
     ~CMeasurementTask()
@@ -60,10 +78,43 @@ class CMeasurementTask: public CTaskInterface
 
     void operator ()()
     {
-      int distance = laser_a.read();
-      terminal << "LASER_distance: " << distance << "\n";
+      /*
+      terminal << "LASER_distance: ";
+      for (unsigned int i = 0; i < SENSORS_COUNT; i++)
+      {
+          int distance = laser[i].read();
+          terminal << distance << " ";
+      }
+      */
+
+      for (unsigned int i = 0; i < SENSORS_COUNT; i++)
+      {
+        laser[i].process();
+
+      }
+      
+      bool event = false;
+
+      for (unsigned int i = 0; i < SENSORS_COUNT; i++)
+      {
+        if (laser[i].result.event) {
+          event = true;
+        }
+      }
+
+      if (event)
+      {
+          terminal << timer.get_time() << " ";
+          for (unsigned int i = 0; i < SENSORS_COUNT; i++)
+          {
+            terminal << laser[i].result.event << " ";
+          }
+          terminal << "\n";
+      }
     }
 };
+
+
 
 
 int main()

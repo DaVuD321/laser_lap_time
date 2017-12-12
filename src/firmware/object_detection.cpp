@@ -31,10 +31,10 @@ void CObjectDetection::process()
 
 
   result.distance = raw;
-  result.bias_value = (result.bias_value*31 + result.distance)/32;
-  result.filtered_value = result.distance - result.bias_value;
+  result.bias_value = (result.bias_value*31 + result.distance)/32;  //integracny RC clanok, diskretna implementacia
+  result.filtered_value = result.distance - result.bias_value;      //hornopriepustny filter
 
-  if ((result.filtered_value < -10) && (detection_count_down == 0))
+  if ((result.filtered_value < -10) && (detection_count_down == 0))   //porovnanie trashholdov, ked to presiahne rozdiel tak to hlasi detekciu
   {
     result.event = true;
     detection_count_down = 20;

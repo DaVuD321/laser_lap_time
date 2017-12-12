@@ -65,6 +65,15 @@ class CTerminal: public CUSART
       putf(op, 3);
       return *this;
     }
+
+    CTerminal& operator<< (bool op)
+    {
+      if (op)
+      put_char('1');
+      else
+      put_char('0');
+      return *this;
+    }
 };
 
 extern CTerminal terminal;
