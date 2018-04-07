@@ -25,10 +25,8 @@ class EventMeassurement
 
   private:
     float start_time, stop_time;
-    int state;
 
-    int start_sensor;
-    int stop_sensor;
+    int start_sensor, stop_sensor;
 
 
 };

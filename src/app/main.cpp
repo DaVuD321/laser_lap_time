@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <vector>
 #include <unistd.h>
+#include <signal.h>
 
 #include <serial_port.h>
 #include <numbers_parser.h>
@@ -29,8 +30,10 @@ int main()
 {
   EventMeassurement event(1,4);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
-
+  int cycleCounter = 0;
   int error = serial_port.get_error();
+
+  std::vector<std::pair<int,float>> history;
 
   if (error < 0)
   {
@@ -60,6 +63,14 @@ int main()
         process_result(parser_result);
         event.process(parser_result);
 
+        if(event.is_done())
+        {
+          cycleCounter++;
+          printf("%d. Cycle time  : %6.1f ms",cycleCounter, event.get_time());
+          printf("\n");
+          history.push_back(std::make_pair(cycleCounter,event.get_time()));
+          event.reset();
+        }
       }
 
     }
@@ -77,6 +88,15 @@ int main()
       }
       */
       usleep(100*1000);
+      if(getchar() == 'q')
+      {
+        for(int i = 0; i <= history.size(); i++)
+        {
+          printf("%d Cycle time: %f", history[i].first, history[i].second);
+          printf("\n");
+        }
+        break;
+      }
     }
   }
 

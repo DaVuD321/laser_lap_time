@@ -6,24 +6,36 @@ EventMeassurement::EventMeassurement(int start_sensor_IDX, int stop_sensor_IDX)/
 :start_sensor (start_sensor_IDX),
 stop_sensor (stop_sensor_IDX)
 {
-
 }
 
 void EventMeassurement::reset()
 {
-
+  start_time = 0;
+  stop_time = 0;
 }
 
 bool EventMeassurement::is_done()
 {
+  if((start_time != 0) && (stop_time != 0))
+  return true;
 
+  return false;
 }
 
 float EventMeassurement::get_time()
 {
-
+  float time = stop_time - start_time;
+  return time;
 }
 void EventMeassurement::process(std::vector<float> &sensor_output)
 {
-  
+  if(sensor_output[start_sensor] == 1)
+  {
+    start_time = sensor_output[0];
+  }
+  if(sensor_output[stop_sensor] == 1)
+  {
+    stop_time = sensor_output[0];
+  }
+
 }
