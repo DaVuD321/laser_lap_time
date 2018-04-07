@@ -10,9 +10,9 @@ SIZE = size
 
 # DEGUBFLAGS = -g -pg
 
-LD_LIBS = -ljsoncpp -lglut -lGL -lGLU -lX11
+LD_LIBS = -ljsoncpp -lglut # -lX11 -lGL -lGLU
 CFLAGS = $(DEGUBFLAGS) -O2 -Os -s -Wall -Wextra -pedantic -std=c++11 $(INC)
-LDFLAGS = $(DEGUBFLAGS) -v -std=c++11 -lm -lpthread -pthread # $(LD_LIBS)
+LDFLAGS = $(DEGUBFLAGS) -v -std=c++11 -lm -lpthread -pthread  $(LD_LIBS)
 
 SRCS = $(shell find . -name '*.cpp')
 

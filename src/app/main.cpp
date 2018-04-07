@@ -4,6 +4,8 @@
 
 #include <serial_port.h>
 #include <numbers_parser.h>
+#include <EventMeassurement.h>
+
 
 //EventMeassurment whole_lap(1, 2), top_speed(3, 4);
 
@@ -15,12 +17,17 @@ void process_result(std::vector<float> &result)
   */
   printf("result : ");
   for (unsigned int i = 0; i < result.size(); i++)
-    printf("%6.3f ", result[i]);
+  {
+    printf("%6.1f ", result[i]);
+    if(i == 0)
+      printf("ms");
+  }
   printf("\n");
 }
 
 int main()
 {
+  EventMeassurement event(1,4);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
 
   int error = serial_port.get_error();
@@ -48,9 +55,11 @@ int main()
 
       if (parser.updated())
       {
-        auto parser_result = parser.get();
+        auto parser_result = parser.get();  //cez for prechadzat
 
         process_result(parser_result);
+        event.process(parser_result);
+
       }
 
     }
