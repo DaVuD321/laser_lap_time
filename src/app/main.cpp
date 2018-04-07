@@ -2,6 +2,7 @@
 #include <vector>
 #include <unistd.h>
 #include <signal.h>
+#include <iostream>
 
 #include <serial_port.h>
 #include <numbers_parser.h>
@@ -88,14 +89,14 @@ int main()
       }
       */
       usleep(100*1000);
-      if(getchar() == 'q')
+      if(cycleCounter > 3)
       {
-        for(int i = 0; i <= history.size(); i++)
+        for(unsigned int i = 0; i < history.size(); i++)
         {
           printf("%d Cycle time: %f", history[i].first, history[i].second);
           printf("\n");
         }
-        break;
+        exit(0);
       }
     }
   }

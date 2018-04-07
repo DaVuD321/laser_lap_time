@@ -33,7 +33,7 @@ void EventMeassurement::process(std::vector<float> &sensor_output)
   {
     start_time = sensor_output[0];
   }
-  if(sensor_output[stop_sensor] == 1)
+  if((sensor_output[stop_sensor] == 1)&&(start_time != 0))
   {
     stop_time = sensor_output[0];
   }
