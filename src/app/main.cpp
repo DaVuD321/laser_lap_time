@@ -7,7 +7,7 @@
 #include <serial_port.h>
 #include <numbers_parser.h>
 #include <EventMeassurement.h>
-
+#include <json_parse.h>
 
 //EventMeassurment whole_lap(1, 2), top_speed(3, 4);
 
@@ -27,8 +27,30 @@ void process_result(std::vector<float> &result)
   printf("\n");
 }
 
+std::vector<EventMeassurement*> read_configuration()
+{
+  JSONParse konfigurak("config.json");
+
+  std::vector<EventMeassurement*> result;
+
+  for (unsigned int i = 0; i < konfigurak.result["meassurements"].size(); i++)
+  {
+    Json::Value tmp = konfigurak.result["meassurements"][i];
+//do EventMeassurementu
+    result.push_back(new EventMeassurement(tmp));
+  }
+
+  return result;
+}
+
 int main()
 {
+  auto event_m = read_configuration();//dat do cyklu
+
+  for (unsigned int i = 0; i < event_m.size(); i++)
+    delete event_m[i];
+  return 0;
+
   EventMeassurement event(1,4);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
   int cycleCounter = 0;
@@ -62,7 +84,7 @@ int main()
         auto parser_result = parser.get();  //cez for prechadzat
 
         process_result(parser_result);
-        event.process(parser_result);
+        event.process(parser_result);//dat do cyklu, kazdy bude dostavat parser result
 
         if(event.is_done())
         {

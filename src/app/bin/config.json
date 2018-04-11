@@ -1,0 +1,23 @@
+{
+  "meassurements" : [
+                      {
+                        "name"         : "whole lap",
+                        "start_sensor" : 1,
+                        "stop_sensor" : 4,
+                        "distance"   : 1.456
+                      },
+                      {
+                        "name"         : "start speed",
+                        "start_sensor" : 1,
+                        "stop_sensor" : 2,
+                        "distance"   : 3432.545
+                      },
+                      {
+                        "name"         : "top speed",
+                        "start_sensor" : 3,
+                        "stop_sensor" : 4,
+                        "distance"   : 4.54646
+                      }
+                    ]
+
+}

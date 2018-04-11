@@ -11,12 +11,15 @@
 #define _EventMeassurement_H_
 
 #include <vector>
+#include <string>
+#include <json_parse.h>
 
 class EventMeassurement
 {
   public:
     EventMeassurement(int start_sensor_IDX, int stop_sensor_IDX);
     //~EventMeassurement();
+    EventMeassurement(Json::Value &json_config);
 
     void reset();
     void process(std::vector<float> &sensor_output);
@@ -25,7 +28,8 @@ class EventMeassurement
 
   private:
     float start_time, stop_time;
-
+    float distance;
+    std::string name;
     int start_sensor, stop_sensor;
 
 
