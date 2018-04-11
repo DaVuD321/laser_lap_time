@@ -25,12 +25,27 @@ class EventMeassurement
     void process(std::vector<float> &sensor_output);
     bool is_done();
     float get_time();
+    void saveHistory(const float time);
+    std::string getName()
+    {
+      return name;
+    }
+    void incrementRound()
+    {
+      round++;
+    }
+    int getRound()
+    {
+      return round;
+    }
 
   private:
     float start_time, stop_time;
     float distance;
     std::string name;
     int start_sensor, stop_sensor;
+    std::vector<std::pair<int,float>> history;
+    int round = 0;
 
 
 };

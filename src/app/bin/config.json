@@ -17,6 +17,12 @@
                         "start_sensor" : 3,
                         "stop_sensor" : 4,
                         "distance"   : 4.54646
+                      },
+                      {
+                        "name"         : "best speed",
+                        "start_sensor" : 2,
+                        "stop_sensor"  : 3,
+                        "distance"     : 41
                       }
                     ]
 

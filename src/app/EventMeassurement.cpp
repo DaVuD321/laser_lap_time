@@ -55,3 +55,8 @@ void EventMeassurement::process(std::vector<float> &sensor_output)
   }
 
 }
+
+void EventMeassurement::saveHistory(const float time)
+{
+    history.push_back(std::make_pair(round, time));
+}

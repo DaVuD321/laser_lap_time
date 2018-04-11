@@ -46,12 +46,11 @@ std::vector<EventMeassurement*> read_configuration()
 int main()
 {
   auto event_m = read_configuration();//dat do cyklu
+//  std::vector<EventMeassurement*>::iterator event;
 
-  for (unsigned int i = 0; i < event_m.size(); i++)
-    delete event_m[i];
-  return 0;
+  //return 0;
 
-  EventMeassurement event(1,4);
+//  EventMeassurement event(1,4);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
   int cycleCounter = 0;
   int error = serial_port.get_error();
@@ -84,7 +83,7 @@ int main()
         auto parser_result = parser.get();  //cez for prechadzat
 
         process_result(parser_result);
-        event.process(parser_result);//dat do cyklu, kazdy bude dostavat parser result
+        /*  event.process(parser_result);//dat do cyklu, kazdy bude dostavat parser result
 
         if(event.is_done())
         {
@@ -93,7 +92,20 @@ int main()
           printf("\n");
           history.push_back(std::make_pair(cycleCounter,event.get_time()));
           event.reset();
-        }
+        }*/
+        // for(event = event_m.begin();event != event_m.end();event ++)
+        for(auto event : event_m)
+         {
+             event->process(parser_result);
+             if(event->is_done())
+             {
+               event->incrementRound();
+               printf("%s %d. Round time  : %6.1f ms", event->getName().c_str(), event->getRound(), event->get_time());
+               printf("\n");
+               event->saveHistory(event->get_time());
+               event->reset();
+             }
+         }
       }
 
     }
@@ -111,13 +123,10 @@ int main()
       }
       */
       usleep(100*1000);
-      if(cycleCounter > 3)
+      if (false)
       {
-        for(unsigned int i = 0; i < history.size(); i++)
-        {
-          printf("%d Cycle time: %f", history[i].first, history[i].second);
-          printf("\n");
-        }
+        for (unsigned int i = 0; i < event_m.size(); i++)
+          delete event_m[i];
         exit(0);
       }
     }
