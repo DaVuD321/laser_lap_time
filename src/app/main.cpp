@@ -8,15 +8,11 @@
 #include <numbers_parser.h>
 #include <EventMeassurement.h>
 #include <json_parse.h>
-
-//EventMeassurment whole_lap(1, 2), top_speed(3, 4);
+#include <getch.h>
+#include <visualisation.h>
 
 void process_result(std::vector<float> &result)
 {
-  /*
-  whole_lap.process(result);
-  top_speed.process(result);
-  */
   printf("result : ");
   for (unsigned int i = 0; i < result.size(); i++)
   {
@@ -43,14 +39,45 @@ std::vector<EventMeassurement*> read_configuration()
   return result;
 }
 
+void opengl_example()
+{
+  Visualisation okenko;
+
+  float roll = 0.0;
+  float pitch = 0.0;
+  float yaw = 0.0;
+  float d_angle = 0.3;
+
+  while (getch() != 'q')
+  {
+    okenko.start();
+
+      okenko.set_color(0.0, 1.0, 0.0);
+      okenko.print(0.0, 0.0, -3.0, "some string");
+
+      okenko.push();
+        okenko.set_color(1.0, 0.0, 0.0);
+        okenko.translate(0.0, 0.0, -3.0);
+        okenko.rotate(roll, pitch, yaw);
+
+        okenko.draw_cube(0.2);
+      okenko.pop();
+
+      roll+= d_angle;
+      pitch+= d_angle;
+      yaw+= d_angle;
+
+    okenko.finish();
+  }
+}
+
 int main()
 {
+  opengl_example();
+  return 0;
+
   auto event_m = read_configuration();//dat do cyklu
-//  std::vector<EventMeassurement*>::iterator event;
 
-  //return 0;
-
-//  EventMeassurement event(1,4);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
   int cycleCounter = 0;
   int error = serial_port.get_error();
@@ -65,35 +92,32 @@ int main()
 
   NumbersParser parser;
 
+  int key;
   while (1)
   {
-    /*
-    if (get_char() == ' ')
+    key = getch();
+
+    if (key == 'q')
+      break;
+
+    if (key == ' ')
     {
-      whole_lap.reset();
-      top_speed.reset();
+      for(auto event : event_m)
+       {
+           event->reset();
+      }
     }
-    */
+
     if (serial_port.is_char())
     {
       parser.add(serial_port.get_char());
 
       if (parser.updated())
       {
-        auto parser_result = parser.get();  //cez for prechadzat
+        auto parser_result = parser.get();
 
         process_result(parser_result);
-        /*  event.process(parser_result);//dat do cyklu, kazdy bude dostavat parser result
 
-        if(event.is_done())
-        {
-          cycleCounter++;
-          printf("%d. Cycle time  : %6.1f ms",cycleCounter, event.get_time());
-          printf("\n");
-          history.push_back(std::make_pair(cycleCounter,event.get_time()));
-          event.reset();
-        }*/
-        // for(event = event_m.begin();event != event_m.end();event ++)
         for(auto event : event_m)
          {
              event->process(parser_result);
@@ -111,27 +135,13 @@ int main()
     }
     else
     {
-      /*
-      if (whole_lap.is_done())
-      {
-        printf("lap time %f[s]\n", whole_lap.get());
-      }
-
-      if (top_speed.is_done())
-      {
-        printf("top speed  %f[s]\n", top_speed.get());
-      }
-      */
       usleep(100*1000);
-      if (false)
-      {
-        for (unsigned int i = 0; i < event_m.size(); i++)
-          delete event_m[i];
-        exit(0);
-      }
     }
   }
+  for (unsigned int i = 0; i < event_m.size(); i++)
+    delete event_m[i];
+printf("\n");
+  exit(0);
 
-  printf("program done\n");
   return 0;
 }

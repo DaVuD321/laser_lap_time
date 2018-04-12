@@ -1,6 +1,7 @@
 ELF = bin/main.elf
 
 INC+= -I.
+INC+= -I /opt/X11/include/
 
 CC = g++
 LD = g++
@@ -10,7 +11,10 @@ SIZE = size
 
 # DEGUBFLAGS = -g -pg
 
-LD_LIBS = -ljsoncpp -lglut # -lX11 -lGL -lGLU
+LD_LIBS+= -L/opt/X11/lib
+LD_LIBS+= -ljsoncpp -lglut -lGL -lGLU -lX11
+
+
 CFLAGS = $(DEGUBFLAGS) -O2 -Os -s -Wall -Wextra -pedantic -std=c++11 $(INC)
 LDFLAGS = $(DEGUBFLAGS) -v -std=c++11 -lm -lpthread -pthread  $(LD_LIBS)
 
