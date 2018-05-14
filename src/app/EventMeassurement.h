@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 #include <json_parse.h>
+#include <visualisation.h>
 
 class EventMeassurement
 {
@@ -26,6 +27,8 @@ class EventMeassurement
     bool is_done();
     float get_time();
     void saveHistory(const float time);
+    void update_opengl_print(const Visualisation &okno);
+
     std::string getName()
     {
       return name;
@@ -38,6 +41,11 @@ class EventMeassurement
     {
       return round;
     }
+    std::vector<std::pair<int,float>> getHistory()
+    {
+      return history;
+    }
+
 
   private:
     float start_time, stop_time;
@@ -46,6 +54,7 @@ class EventMeassurement
     int start_sensor, stop_sensor;
     std::vector<std::pair<int,float>> history;
     int round = 0;
+    bool one_sensor_memory = false;
 
 
 };

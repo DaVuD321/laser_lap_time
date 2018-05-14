@@ -36,6 +36,7 @@ class Visualisation
 
     void paint_circle(float x, float y, float z, float size, float r, float g, float b);
     void print(float x, float y, float z, std::string string);
+    void print3d(int x, int y, int z, std::string string);
 
 };
 

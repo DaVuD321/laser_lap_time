@@ -25,7 +25,7 @@ Visualisation::Visualisation(unsigned int window_width, unsigned int window_heig
 
     glutInitWindowSize(window_width, window_height);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-    g_visualisation_window_handle = glutCreateWindow("visualisation window");
+    g_visualisation_window_handle = glutCreateWindow("Časomiera");
 
 
     glViewport(0, 0, window_width, window_height);
@@ -193,6 +193,19 @@ void Visualisation::print(float x, float y, float z, std::string string)
 {
   //set the position of the text in the window using the x, y and z coordinates
   glRasterPos3f(x,y,z);
+  //get the length of the string to display
+
+  //loop to display character by character
+  for (unsigned int i = 0; i < string.size(); i++)
+  {
+  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,string[i]);
+  }
+}
+
+void Visualisation::print3d(int x, int y, int z, std::string string)
+{
+  //set the position of the text in the window using the x, y and z coordinates
+  glRasterPos3i(x,y,z);
   //get the length of the string to display
 
   //loop to display character by character

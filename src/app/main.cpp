@@ -39,45 +39,40 @@ std::vector<EventMeassurement*> read_configuration()
   return result;
 }
 
-void opengl_example()
+void opengl_print(Visualisation &okenko,const std::vector<EventMeassurement*> &events)
 {
-  Visualisation okenko;
-
-  float roll = 0.0;
-  float pitch = 0.0;
-  float yaw = 0.0;
-  float d_angle = 0.3;
-
-  while (getch() != 'q')
+  float y_step = 0.15;
+  std::vector<std::pair<int,float>> history;
+//  while (getch() != 'q')
   {
     okenko.start();
-
-      okenko.set_color(0.0, 1.0, 0.0);
-      okenko.print(0.0, 0.0, -3.0, "some string");
-
-      okenko.push();
-        okenko.set_color(1.0, 0.0, 0.0);
-        okenko.translate(0.0, 0.0, -3.0);
-        okenko.rotate(roll, pitch, yaw);
-
-        okenko.draw_cube(0.2);
-      okenko.pop();
-
-      roll+= d_angle;
-      pitch+= d_angle;
-      yaw+= d_angle;
-
-    okenko.finish();
+    int pos = 0;
+      for(auto event : events)
+      {
+        history = event->getHistory();
+        okenko.set_color(0.0, 1.0, 0.0);
+        okenko.print(-2.2 + (pos*4.4/events.size()), 1.1, -3.0, event->getName());
+        int y_stepper = 1;
+        for(int i = 0; i < history.size(); i++)
+        {
+          okenko.print(-2.2 + (pos*4.4/events.size()), 1.1 - (y_step * y_stepper), -3.0, std::to_string(history[i].second));
+          y_stepper ++;;
+        }
+        okenko.push();
+        okenko.pop();
+        //okenko.print(-2.2, 1.1, -3.0, "Nasrat"); // 1.0 = 300 pixels   2.2X, 1.1Y
+        pos++;
+      }
+      okenko.finish();
   }
 }
 
 int main()
 {
-  opengl_example();
-  return 0;
-
-  auto event_m = read_configuration();//dat do cyklu
-
+  Visualisation okenko(1440,804);
+  //opengl_print(okenko);
+  auto event_m = read_configuration();//dat do cyklu  // event_m.size() velkost vektora
+  opengl_print(okenko,event_m);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
   int cycleCounter = 0;
   int error = serial_port.get_error();
@@ -117,7 +112,8 @@ int main()
         auto parser_result = parser.get();
 
         process_result(parser_result);
-
+      //  okenko.start();
+    //    okenko.set_color(0.0, 1.0, 0.0);
         for(auto event : event_m)
          {
              event->process(parser_result);
@@ -128,8 +124,11 @@ int main()
                printf("\n");
                event->saveHistory(event->get_time());
                event->reset();
+               opengl_print(okenko,event_m);
              }
+          //   okenko.print(-2.2 + (pos*4.4/event_m.size()), 1.1, -3.0, event->getName());
          }
+         //okenko.finish();
       }
 
     }

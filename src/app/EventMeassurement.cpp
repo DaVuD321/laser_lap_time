@@ -24,8 +24,15 @@ EventMeassurement::EventMeassurement(Json::Value &json_config)
 
 void EventMeassurement::reset()
 {
-  start_time = 0;
+  start_time = stop_time;
   stop_time = 0;
+  one_sensor_memory = false;
+  if(start_sensor != stop_sensor)
+  {
+    start_time = 0;
+    stop_time = 0;
+    one_sensor_memory = false;
+  }
 }
 
 bool EventMeassurement::is_done()
@@ -44,19 +51,54 @@ float EventMeassurement::get_time()
 
 void EventMeassurement::process(std::vector<float> &sensor_output)
 {
-  if(sensor_output[start_sensor] == 1)
+  if(start_time != 0)
+  {
+    one_sensor_memory = true;
+  }
+  else if(sensor_output[start_sensor] == 1)
   {
     start_time = sensor_output[0];
   }
 
-  if((sensor_output[stop_sensor] == 1)&&(start_time != 0))
-  {
-    stop_time = sensor_output[0];
-  }
-
+    if((sensor_output[stop_sensor] == 1)&&(start_time != 0)&&(one_sensor_memory == true))
+    {
+      stop_time = sensor_output[0];
+    }
 }
 
 void EventMeassurement::saveHistory(const float time)
 {
     history.push_back(std::make_pair(round, time));
+}
+
+void EventMeassurement::update_opengl_print(const Visualisation &okno)
+{
+  Visualisation okenko;
+
+  float roll = 0.0;
+  float pitch = 0.0;
+  float yaw = 0.0;
+  float d_angle = 0.3;
+
+  //while (getch() != 'q')
+  {okenko.print(-1.0, 0.0, -3.0, "Mantak David");okenko.finish();
+//    okenko.start();
+
+/*      okenko.set_color(0.0, 1.0, 0.0);
+      okenko.print(-1.0, 0.0, -3.0, "Mantak David");
+
+      okenko.push();
+        okenko.set_color(1.0, 0.0, 0.0);
+        okenko.translate(0.0, 0.0, -3.0);
+        okenko.rotate(roll, pitch, yaw);
+
+        okenko.draw_cube(0.2);
+      okenko.pop();
+
+      roll+= d_angle;
+      pitch+= d_angle;
+      yaw+= d_angle;
+*/
+//    okenko.finish();
+  }
 }
