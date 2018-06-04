@@ -4,6 +4,7 @@
 #include <math.h>
 #include <i2c.h>
 #include <vl53l0x.h>
+#include <mag3110.h>
 #include <object_detection.h>
 /*
 class CBlinkTask: public CTaskInterface
@@ -36,9 +37,52 @@ class CBlinkTask: public CTaskInterface
     }
 };
 
-
 class CBlinkTask blink_task;
 */
+
+
+
+class MagTest
+{
+  private:
+    TI2C<TGPIOC,0,5> i2c_a;
+    TI2C<TGPIOC,1,5> i2c_b;
+    TI2C<TGPIOC,2,5> i2c_c;
+    TI2C<TGPIOC,3,5> i2c_d;
+    Mag3110 mag[4];
+
+  public:
+    MagTest()
+    {
+      terminal << "starting\n";
+
+      mag[0].init(&i2c_a);
+      mag[1].init(&i2c_b);
+      mag[2].init(&i2c_c);
+      mag[3].init(&i2c_d);
+
+     terminal << "init done\n";
+
+    }
+
+    void run()
+    {
+    while(1) {
+      for(int i=0;i<4;i++)
+      {
+        mag[i].read();
+        terminal.puti( mag[i].result.x );
+        terminal << " ";
+        terminal.puti( mag[i].result.y);
+        terminal << " ";
+        terminal.puti( mag[i].result.z);
+        terminal << " ";
+        timer.delay_ms(200);
+      }
+      terminal << "\n\n";
+    }
+  }
+};
 
 #define SENSORS_COUNT   (unsigned int)4
 
@@ -92,7 +136,7 @@ class CMeasurementTask: public CTaskInterface
         laser[i].process();
 
       }
-      
+
       bool event = false;
 
       for (unsigned int i = 0; i < SENSORS_COUNT; i++)
@@ -119,16 +163,23 @@ class CMeasurementTask: public CTaskInterface
 
 int main()
 {
+  terminal << "\nterminal ready\n\n";
+
+  //MagTest test;
+  //test.run();
+
   CMeasurementTask measurement_task;
 
-  timer.add_task(&measurement_task, 100);
+
+  //timer.add_task(&measurement_task, 100);
 
   terminal << "\nterminal ready\n\n";
 
 
   while (1)
   {
-    timer.main();
+    measurement_task();
+    //timer.main();
   }
 
   return 0;

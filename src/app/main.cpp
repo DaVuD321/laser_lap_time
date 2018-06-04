@@ -11,6 +11,9 @@
 #include <getch.h>
 #include <visualisation.h>
 
+const int WIDTH_SCREEN = 1440;
+const int HEIGHT_SCREEN = 804;
+
 void process_result(std::vector<float> &result)
 {
   printf("result : ");
@@ -41,26 +44,50 @@ std::vector<EventMeassurement*> read_configuration()
 
 void opengl_print(Visualisation &okenko,const std::vector<EventMeassurement*> &events)
 {
+  int max_out = 15;
   float y_step = 0.15;
-  std::vector<std::pair<int,float>> history;
+
 //  while (getch() != 'q')
   {
     okenko.start();
     int pos = 0;
       for(auto event : events)
       {
-        history = event->getHistory();
-        okenko.set_color(0.0, 1.0, 0.0);
+        int from_out = 0;
+        std::vector<std::pair<float,float>> history = event->getHistory();
+
+        if(history.size() > max_out)
+        {
+          from_out = history.size() - 15 -1;
+        }
+
+        okenko.set_color(1.0, 0.0, 0.0);
         okenko.print(-2.2 + (pos*4.4/events.size()), 1.1, -3.0, event->getName());
         int y_stepper = 1;
-        for(int i = 0; i < history.size(); i++)
+        okenko.set_color(0.0, 1.0, 0.0);
+        for(from_out; from_out < history.size(); from_out++)
         {
-          okenko.print(-2.2 + (pos*4.4/events.size()), 1.1 - (y_step * y_stepper), -3.0, std::to_string(history[i].second));
+          std::string value;
+          if(event->getOutput())
+          {
+            value = std::to_string(history[from_out].second);
+            value.append(event->getSuffix());
+          }
+          else
+          {
+            value = std::to_string(history[from_out].first);
+            value.append(event->getSuffix());
+          }
+          okenko.print(-2.2 + (pos*4.4/events.size()), 1.1 - (y_step * y_stepper), -3.0, value);
           y_stepper ++;;
         }
         okenko.push();
         okenko.pop();
         //okenko.print(-2.2, 1.1, -3.0, "Nasrat"); // 1.0 = 300 pixels   2.2X, 1.1Y
+
+        //std::stringstream stringstream
+        // stream << std::fixed << std::setprecision(2) << score;
+        //str_score+= stream.str()
         pos++;
       }
       okenko.finish();
@@ -69,7 +96,7 @@ void opengl_print(Visualisation &okenko,const std::vector<EventMeassurement*> &e
 
 int main()
 {
-  Visualisation okenko(1440,804);
+  Visualisation okenko(WIDTH_SCREEN,HEIGHT_SCREEN);
   //opengl_print(okenko);
   auto event_m = read_configuration();//dat do cyklu  // event_m.size() velkost vektora
   opengl_print(okenko,event_m);
@@ -122,7 +149,7 @@ int main()
                event->incrementRound();
                printf("%s %d. Round time  : %6.1f ms", event->getName().c_str(), event->getRound(), event->get_time());
                printf("\n");
-               event->saveHistory(event->get_time());
+               event->saveHistory(event->get_speed(), event->get_time());
                event->reset();
                opengl_print(okenko,event_m);
              }

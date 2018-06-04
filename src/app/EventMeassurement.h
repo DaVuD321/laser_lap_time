@@ -26,7 +26,8 @@ class EventMeassurement
     void process(std::vector<float> &sensor_output);
     bool is_done();
     float get_time();
-    void saveHistory(const float time);
+    float get_speed();
+    void saveHistory(const float speed, const float time);
     void update_opengl_print(const Visualisation &okno);
 
     std::string getName()
@@ -41,9 +42,17 @@ class EventMeassurement
     {
       return round;
     }
-    std::vector<std::pair<int,float>> getHistory()
+    std::vector<std::pair<float,float>> getHistory()
     {
       return history;
+    }
+    bool getOutput()
+    {
+      return output_time;
+    }
+    std::string getSuffix()
+    {
+      return output_suffix;
     }
 
 
@@ -52,9 +61,12 @@ class EventMeassurement
     float distance;
     std::string name;
     int start_sensor, stop_sensor;
-    std::vector<std::pair<int,float>> history;
+    std::vector<std::pair<float,float>> history; // first = speed , second = time
     int round = 0;
     bool one_sensor_memory = false;
+
+    std::string output_suffix = "";
+    bool output_time = false;
 
 
 };

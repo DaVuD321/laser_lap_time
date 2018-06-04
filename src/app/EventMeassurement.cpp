@@ -2,7 +2,6 @@
 #include "EventMeassurement.h"
 #include <stdio.h>
 
-
 EventMeassurement::EventMeassurement(int start_sensor_IDX, int stop_sensor_IDX)//konstruktor
 :start_sensor (start_sensor_IDX),
 stop_sensor (stop_sensor_IDX)
@@ -16,6 +15,17 @@ EventMeassurement::EventMeassurement(Json::Value &json_config)
   start_sensor = json_config["start_sensor"].asInt();
   stop_sensor = json_config["stop_sensor"].asInt();
   distance = json_config["distance"].asFloat();
+  std::string output = json_config["output"].asString();
+
+  if(output == "time")
+  {
+    output_suffix = " ms";
+    output_time = true;
+  }
+  else
+  {
+    output_suffix = " m/s";
+  }
 
   printf("%s %u %u %f\n", name.c_str(), start_sensor, stop_sensor, distance);
 
@@ -49,6 +59,12 @@ float EventMeassurement::get_time()
   return time;
 }
 
+float EventMeassurement::get_speed()
+{
+  float speed = distance/get_time();
+  return speed;
+}
+
 void EventMeassurement::process(std::vector<float> &sensor_output)
 {
   if(start_time != 0)
@@ -66,9 +82,9 @@ void EventMeassurement::process(std::vector<float> &sensor_output)
     }
 }
 
-void EventMeassurement::saveHistory(const float time)
+void EventMeassurement::saveHistory(const float speed, const float time)
 {
-    history.push_back(std::make_pair(round, time));
+    history.push_back(std::make_pair(speed, time));
 }
 
 void EventMeassurement::update_opengl_print(const Visualisation &okno)

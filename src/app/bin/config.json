@@ -1,28 +1,32 @@
 {
   "meassurements" : [
                       {
-                        "name"         : "whole lap",
+                        "name"         : "WHOLE LAP",
                         "start_sensor" : 1,
-                        "stop_sensor" : 1,
-                        "distance"   : 1.456
+                        "stop_sensor" : 4,
+                        "distance"   : 7000.456,
+                        "output" : "speed"
                       },
                       {
-                        "name"         : "start speed",
+                        "name"         : "START TIME",
                         "start_sensor" : 1,
                         "stop_sensor" : 2,
-                        "distance"   : 3432.545
+                        "distance"   : 3432.545,
+                        "output" : "time"
                       },
                       {
-                        "name"         : "top speed",
+                        "name"         : "TOP SPEED",
                         "start_sensor" : 3,
                         "stop_sensor" : 4,
-                        "distance"   : 4.54646
+                        "distance"   : 1000,
+                        "output" : "speed"
                       },
                       {
-                        "name"         : "best speed",
+                        "name"         : "BEST TIME",
                         "start_sensor" : 2,
                         "stop_sensor"  : 3,
-                        "distance"     : 41
+                        "distance"     : 41,
+                        "output" : "time"
                       }
                     ]
 
