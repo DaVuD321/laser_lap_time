@@ -17,18 +17,18 @@
 class CI2C_Interface
 {
   public:
-    virtual void start() = 0;
-    virtual void stop() = 0;
+    virtual void start() { };
+    virtual void stop() { };
 
-    virtual unsigned char write(unsigned char b)  = 0;
-    virtual unsigned char read(unsigned char ack = 0) = 0;
+    virtual unsigned char write(unsigned char b) { };
+    virtual unsigned char read(unsigned char ack = 0) { };
 
-    virtual void write_reg(unsigned char dev_adr, unsigned char reg_adr, unsigned char value)  = 0;
-    virtual void write_reg_16bit(unsigned char dev_adr, unsigned char reg_adr, unsigned int value)  = 0;
-    virtual void write_reg_multi(unsigned char dev_adr, unsigned char reg_adr, unsigned char *data, unsigned int count)  = 0;
-    virtual unsigned char read_reg(unsigned char dev_adr, unsigned char reg_adr)  = 0;
-    virtual unsigned int read_reg_16bit(unsigned char dev_adr, unsigned char reg_adr)  = 0;
-    virtual void read_reg_multi(unsigned char dev_adr, unsigned char reg_adr, unsigned char *data, unsigned int count)  = 0;
+    virtual void write_reg(unsigned char dev_adr, unsigned char reg_adr, unsigned char value)  { };
+    virtual void write_reg_16bit(unsigned char dev_adr, unsigned char reg_adr, unsigned int value)  { };
+    virtual void write_reg_multi(unsigned char dev_adr, unsigned char reg_adr, unsigned char *data, unsigned int count)  { };
+    virtual unsigned char read_reg(unsigned char dev_adr, unsigned char reg_adr)  { };
+    virtual unsigned int read_reg_16bit(unsigned char dev_adr, unsigned char reg_adr)  { };
+    virtual void read_reg_multi(unsigned char dev_adr, unsigned char reg_adr, unsigned char *data, unsigned int count)  { };
 };
 /*
 @param port_name - názov portu na ktorom bude I2C, na výber sú TGPIOA až TGPIOD

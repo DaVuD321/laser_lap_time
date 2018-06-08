@@ -5,13 +5,16 @@
 
 struct sMagResult
 {
-  int16_t x, y, z;
+  int x, y, z;
 };
 
 class Mag3110
 {
   public:
     sMagResult result;
+    sMagResult result_old;
+    sMagResult dif;
+    int32_t difference;
 
   private:
     class CI2C_Interface *i2c;
@@ -23,7 +26,7 @@ class Mag3110
     int init(class CI2C_Interface *i2c_);
 
     sMagResult read();
-    int32_t get_intensity();
+    int32_t get_intensity(sMagResult &value);
 
 };
 

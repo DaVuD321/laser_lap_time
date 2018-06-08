@@ -45,10 +45,11 @@ class CBlinkTask blink_task;
 class MagTest
 {
   private:
-    TI2C<TGPIOC,0,5> i2c_a;
-    TI2C<TGPIOC,1,5> i2c_b;
-    TI2C<TGPIOC,2,5> i2c_c;
-    TI2C<TGPIOC,3,5> i2c_d;
+    TI2C<TGPIOC,0,5, 100> i2c_a;
+    TI2C<TGPIOC,1,5, 100> i2c_b;
+    TI2C<TGPIOC,2,5, 100> i2c_c;
+    TI2C<TGPIOC,3,5, 100> i2c_d;
+
     Mag3110 mag[4];
 
   public:
@@ -56,10 +57,19 @@ class MagTest
     {
       terminal << "starting\n";
 
-      mag[0].init(&i2c_a);
-      mag[1].init(&i2c_b);
-      mag[2].init(&i2c_c);
-      mag[3].init(&i2c_d);
+      int init_res;
+
+      init_res = mag[0].init(&i2c_a);
+      terminal << "MAGNETOMETER_init: " <<  init_res << "\n";
+
+      init_res = mag[1].init(&i2c_b);
+      terminal << "MAGNETOMETER_init: " <<  init_res << "\n";
+
+      init_res = mag[2].init(&i2c_c);
+      terminal << "MAGNETOMETER_init: " <<  init_res << "\n";
+
+      init_res = mag[3].init(&i2c_d);
+      terminal << "MAGNETOMETER_init: " <<  init_res << "\n";
 
      terminal << "init done\n";
 
@@ -71,15 +81,21 @@ class MagTest
       for(int i=0;i<4;i++)
       {
         mag[i].read();
-        terminal.puti( mag[i].result.x );
+
+        /*
+        terminal.puti( (int32_t)mag[i].dif.x );
         terminal << " ";
-        terminal.puti( mag[i].result.y);
+        terminal.puti( (int32_t)mag[i].dif.y);
         terminal << " ";
-        terminal.puti( mag[i].result.z);
+        terminal.puti( (int32_t)mag[i].dif.z);
         terminal << " ";
-        timer.delay_ms(200);
+        */
+        terminal << mag[i].difference << " ";
       }
-      terminal << "\n\n";
+      terminal << "\n";
+
+      //timer.delay_ms(20);
+
     }
   }
 };
@@ -165,8 +181,8 @@ int main()
 {
   terminal << "\nterminal ready\n\n";
 
-  //MagTest test;
-  //test.run();
+  MagTest test;
+  test.run();
 
   CMeasurementTask measurement_task;
 
