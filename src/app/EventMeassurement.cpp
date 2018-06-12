@@ -1,6 +1,8 @@
 
 #include "EventMeassurement.h"
 #include <stdio.h>
+#include <math.h>
+static const float TIME_DELAY = 600.0;
 
 EventMeassurement::EventMeassurement(int start_sensor_IDX, int stop_sensor_IDX)//konstruktor
 :start_sensor (start_sensor_IDX),
@@ -67,6 +69,8 @@ float EventMeassurement::get_speed()
 
 void EventMeassurement::process(std::vector<float> &sensor_output)
 {
+  if(sensor_output[0] - previous_time > TIME_DELAY)
+  {
   if(start_time != 0)
   {
     one_sensor_memory = true;
@@ -80,6 +84,7 @@ void EventMeassurement::process(std::vector<float> &sensor_output)
     {
       stop_time = sensor_output[0];
     }
+  }
 }
 
 void EventMeassurement::saveHistory(const float speed, const float time)
@@ -96,25 +101,8 @@ void EventMeassurement::update_opengl_print(const Visualisation &okno)
   float yaw = 0.0;
   float d_angle = 0.3;
 
-  //while (getch() != 'q')
-  {okenko.print(-1.0, 0.0, -3.0, "Mantak David");okenko.finish();
+
 //    okenko.start();
-
-/*      okenko.set_color(0.0, 1.0, 0.0);
-      okenko.print(-1.0, 0.0, -3.0, "Mantak David");
-
-      okenko.push();
-        okenko.set_color(1.0, 0.0, 0.0);
-        okenko.translate(0.0, 0.0, -3.0);
-        okenko.rotate(roll, pitch, yaw);
-
-        okenko.draw_cube(0.2);
-      okenko.pop();
-
-      roll+= d_angle;
-      pitch+= d_angle;
-      yaw+= d_angle;
-*/
 //    okenko.finish();
-  }
+
 }

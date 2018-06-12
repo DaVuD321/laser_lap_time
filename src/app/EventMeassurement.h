@@ -57,6 +57,7 @@ class EventMeassurement
 
 
   private:
+    float previous_time = 0.0;
     float start_time, stop_time;
     float distance;
     std::string name;

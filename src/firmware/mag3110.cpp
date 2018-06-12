@@ -1,5 +1,5 @@
 #include "mag3110.h"
-
+#include <terminal.h>
 #define MAG3110_DR_STATUS            0x00 /**< Data ready status per axis */
 #define MAG3110_OUT_X_MSB            0x01 /**< Bits [15:8] of X measurement */
 #define MAG3110_OUT_X_LSB            0x02 /**< Bits [7:0] of X measurement */
@@ -31,7 +31,6 @@ Mag3110::Mag3110()
   result_old = result;
   dif = result;
 }
-//znizit na 40Hz
 Mag3110::~Mag3110()
 {
 
@@ -95,4 +94,20 @@ sMagResult Mag3110::read()
 int32_t Mag3110::get_intensity(sMagResult &value)
 {
   return (int32_t)value.x*(int32_t)value.x + (int32_t)value.y*(int32_t)value.y + (int32_t)value.z*(int32_t)value.z;
+}
+
+bool Mag3110::detected(uint32_t treshold)
+{
+terminal.puti( (int32_t)result.x );
+  terminal << " ";
+  terminal.puti( (int32_t)result.y );
+  terminal << " ";
+  terminal.puti( (int32_t)result.z );
+  terminal << " ";
+
+      if( (result.x > treshold) || (result.z > treshold) || (result.z > treshold))
+      {
+        return true;
+      }
+      return false;
 }

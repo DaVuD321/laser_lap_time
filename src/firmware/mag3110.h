@@ -15,6 +15,7 @@ class Mag3110
     sMagResult result_old;
     sMagResult dif;
     int32_t difference;
+    bool detected(uint32_t treshold);
 
   private:
     class CI2C_Interface *i2c;
@@ -26,6 +27,7 @@ class Mag3110
     int init(class CI2C_Interface *i2c_);
 
     sMagResult read();
+  //int32_t read();
     int32_t get_intensity(sMagResult &value);
 
 };

@@ -25,7 +25,7 @@ Visualisation::Visualisation(unsigned int window_width, unsigned int window_heig
 
     glutInitWindowSize(window_width, window_height);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-    g_visualisation_window_handle = glutCreateWindow("Časomiera");
+    g_visualisation_window_handle = glutCreateWindow("Casomiera");
 
 
     glViewport(0, 0, window_width, window_height);

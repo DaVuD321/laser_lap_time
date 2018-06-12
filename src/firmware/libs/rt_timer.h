@@ -7,7 +7,7 @@
 #define RT_TIMERS_COUNT    8
 
 #define RT_CPU_FREQUENCY    (uint32_t)16000000    //16MHz
-#define RT_FREQUENCY        (uint32_t)1000        //1000Hz = laser, 40 000 Hz = magnet
+#define RT_FREQUENCY        (uint32_t)1000        
 
 
 class CTaskInterface

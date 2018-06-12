@@ -35,7 +35,6 @@ std::vector<EventMeassurement*> read_configuration()
   for (unsigned int i = 0; i < konfigurak.result["meassurements"].size(); i++)
   {
     Json::Value tmp = konfigurak.result["meassurements"][i];
-//do EventMeassurementu
     result.push_back(new EventMeassurement(tmp));
   }
 
@@ -83,7 +82,6 @@ void opengl_print(Visualisation &okenko,const std::vector<EventMeassurement*> &e
         }
         okenko.push();
         okenko.pop();
-        //okenko.print(-2.2, 1.1, -3.0, "Nasrat"); // 1.0 = 300 pixels   2.2X, 1.1Y
 
         //std::stringstream stringstream
         // stream << std::fixed << std::setprecision(2) << score;
@@ -97,8 +95,7 @@ void opengl_print(Visualisation &okenko,const std::vector<EventMeassurement*> &e
 int main()
 {
   Visualisation okenko(WIDTH_SCREEN,HEIGHT_SCREEN);
-  //opengl_print(okenko);
-  auto event_m = read_configuration();//dat do cyklu  // event_m.size() velkost vektora
+  auto event_m = read_configuration();
   opengl_print(okenko,event_m);
   SerialPort serial_port("/dev/cu.wchusbserialfa130");
   int cycleCounter = 0;
@@ -139,8 +136,7 @@ int main()
         auto parser_result = parser.get();
 
         process_result(parser_result);
-      //  okenko.start();
-    //    okenko.set_color(0.0, 1.0, 0.0);
+
         for(auto event : event_m)
          {
              event->process(parser_result);
@@ -153,9 +149,7 @@ int main()
                event->reset();
                opengl_print(okenko,event_m);
              }
-          //   okenko.print(-2.2 + (pos*4.4/event_m.size()), 1.1, -3.0, event->getName());
          }
-         //okenko.finish();
       }
 
     }

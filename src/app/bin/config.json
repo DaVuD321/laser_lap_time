@@ -5,14 +5,14 @@
                         "start_sensor" : 1,
                         "stop_sensor" : 4,
                         "distance"   : 7000.456,
-                        "output" : "speed"
+                        "output" : "time"
                       },
                       {
-                        "name"         : "START TIME",
+                        "name"         : "WHOLE LAP SPEED",
                         "start_sensor" : 1,
-                        "stop_sensor" : 2,
-                        "distance"   : 3432.545,
-                        "output" : "time"
+                        "stop_sensor" : 4,
+                        "distance"   : 7000,
+                        "output" : "speed"
                       },
                       {
                         "name"         : "TOP SPEED",
@@ -23,8 +23,8 @@
                       },
                       {
                         "name"         : "BEST TIME",
-                        "start_sensor" : 2,
-                        "stop_sensor"  : 3,
+                        "start_sensor" : 3,
+                        "stop_sensor"  : 4,
                         "distance"     : 41,
                         "output" : "time"
                       }
